@@ -300,25 +300,25 @@ export function InternetAuthModal({
                 <div className="mb-4 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 text-amber-900 dark:text-amber-200 space-y-2.5">
                   <div className="flex items-center gap-2 font-bold text-xs text-amber-800 dark:text-amber-300">
                     <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-                    <span>Project Mismatch / Provider Not Enabled</span>
+                    <span>Firebase Sign-in Provider Not Enabled</span>
                   </div>
                   <div className="text-[11px] text-amber-900/90 dark:text-amber-200/90 leading-relaxed space-y-2">
                     <p>
-                      এই অ্যাপটি বর্তমানে যুক্ত আছে: <code className="px-1.5 py-0.5 rounded bg-amber-200/70 dark:bg-amber-900/80 font-mono font-bold text-amber-950 dark:text-amber-100">{resolvedFirebaseConfig.projectId}</code> প্রজেক্টের সাথে।
+                      গুগল ফায়ারবেজে ডিফল্টভাবে নতুন প্রজেক্টের <strong>Email/Password</strong> সাইন-ইন বন্ধ থাকে। এটি চালু না থাকলে সাইন-আপ বা লগইন করা যায় না।
                     </p>
                     <div className="bg-amber-100/70 dark:bg-amber-900/50 p-2.5 rounded-lg space-y-1.5 text-[11px]">
                       <p className="font-semibold text-amber-950 dark:text-amber-100">
-                        Firebase Console-এ কীভাবে সঠিক প্রজেক্ট নির্বাচন করবেন:
+                        কীভাবে ২ ক্লিকে চালু করবেন:
                       </p>
                       <ol className="list-decimal list-inside space-y-1 text-amber-900 dark:text-amber-200">
                         <li>
-                          Console-এর উপরে বাম পাশের প্রজেক্ট ড্রপডাউন (যেখানে <strong>Local msg ▾</strong> লেখা আছে) ক্লিক করুন
+                          নিচের <strong>"Open Firebase Console"</strong> বাটনে ক্লিক করুন
                         </li>
                         <li>
-                          তালিকা থেকে <strong>{resolvedFirebaseConfig.projectId}</strong> সিলেক্ট করুন
+                          <strong>Sign-in providers</strong> তালিকা থেকে <strong>Email/Password</strong>-এ ক্লিক করে <strong>Enable</strong> টগল অন করে <strong>Save</strong> করুন
                         </li>
                         <li>
-                          <strong>Authentication</strong> &gt; <strong>Sign-in method</strong> &gt; <strong>Email/Password</strong> এনাবেল (Enable) করুন
+                          পাশের <strong>Settings</strong> &gt; <strong>Authorized domains</strong>-এ আপনার Vercel ডোমেইনটি যোগ করুন
                         </li>
                       </ol>
                     </div>
@@ -330,7 +330,7 @@ export function InternetAuthModal({
                       rel="noopener noreferrer"
                       className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-2xs transition-colors flex items-center gap-1.5 inline-flex"
                     >
-                      <span>Open {resolvedFirebaseConfig.projectId} in Console</span>
+                      <span>Open Firebase Console ({resolvedFirebaseConfig.projectId})</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                     <button
