@@ -293,15 +293,21 @@ export function useInternetMode() {
   };
 
   const signOut = async () => {
-    if (firebaseUser) {
-      await updateUserPresence(firebaseUser.uid, false);
+    try {
+      if (firebaseUser) {
+        // Non-blocking fire-and-forget presence update
+        updateUserPresence(firebaseUser.uid, false).catch(() => {});
+      }
+      await fbSignOut(auth);
+    } catch (err) {
+      console.warn("[InternetMode] Sign out warning:", err);
+    } finally {
+      setFirebaseUser(null);
+      setUserProfile(null);
+      setConversations([]);
+      setActiveConversationId(null);
+      setActiveMessages([]);
     }
-    await fbSignOut(auth);
-    setFirebaseUser(null);
-    setUserProfile(null);
-    setConversations([]);
-    setActiveConversationId(null);
-    setActiveMessages([]);
   };
 
   const resendVerification = async () => {

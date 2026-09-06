@@ -31,6 +31,20 @@ import { InternetConversation, InternetMessage, UserProfile } from "../types";
 
 // Dynamic configuration prioritizing VITE_FIREBASE_* environment variables if provided
 const env = (import.meta as any).env || {};
+const isAiStudio =
+  typeof window !== "undefined"
+    ? window.location.hostname.includes(".run.app") || window.location.hostname === "localhost"
+    : true;
+
+const rawDbId = (env.VITE_FIREBASE_FIRESTORE_DATABASE_ID as string)?.trim();
+// In external deployments (Vercel, custom domain), unless explicitly configured with another ID, standard Firestore is always "(default)"
+const targetDbId =
+  rawDbId && rawDbId !== "ai-studio-locallink-7153400f-c20e-42ea-b930-5d1d025df89e"
+    ? rawDbId
+    : isAiStudio
+    ? firebaseConfig.firestoreDatabaseId || "(default)"
+    : "(default)";
+
 export const resolvedFirebaseConfig = {
   apiKey: (env.VITE_FIREBASE_API_KEY as string) || firebaseConfig.apiKey,
   authDomain: (env.VITE_FIREBASE_AUTH_DOMAIN as string) || firebaseConfig.authDomain,
@@ -38,7 +52,7 @@ export const resolvedFirebaseConfig = {
   storageBucket: (env.VITE_FIREBASE_STORAGE_BUCKET as string) || firebaseConfig.storageBucket,
   messagingSenderId: (env.VITE_FIREBASE_MESSAGING_SENDER_ID as string) || firebaseConfig.messagingSenderId,
   appId: (env.VITE_FIREBASE_APP_ID as string) || firebaseConfig.appId,
-  firestoreDatabaseId: (env.VITE_FIREBASE_FIRESTORE_DATABASE_ID as string) || firebaseConfig.firestoreDatabaseId || "(default)",
+  firestoreDatabaseId: targetDbId,
 };
 
 // 1. Initialize Firebase App

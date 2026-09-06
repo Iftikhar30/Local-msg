@@ -4,6 +4,10 @@
     {
       "source": "/api/signal/:action*",
       "destination": "/api/signal?action=:action"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ]
 }

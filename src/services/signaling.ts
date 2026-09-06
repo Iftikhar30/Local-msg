@@ -182,11 +182,9 @@ export class SignalingClient {
       // Attempt fallback to local built-in signaling if custom URL had a network error
       if (this.baseUrl !== "") {
         console.warn("[SignalingClient] Attempting fallback to local built-in signaling server...");
+        this.baseUrl = "";
         const fallbackRes = await this.tryLocalRegister(payload);
-        if (fallbackRes.success || fallbackRes.codeTaken) {
-          this.baseUrl = "";
-          return fallbackRes;
-        }
+        return fallbackRes;
       }
 
       return {
