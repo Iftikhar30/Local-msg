@@ -1,0 +1,212 @@
+export type PeerConnectionStatus =
+  | "new"
+  | "connecting"
+  | "reconnecting"
+  | "connected"
+  | "disconnected"
+  | "failed"
+  | "closed";
+
+export type AppTab = "home" | "devices" | "chat" | "settings" | "about";
+
+export type AppMode = "local" | "internet";
+
+export interface UserProfile {
+  uid: string;
+  phoneNumber: string;
+  email: string;
+  displayName: string;
+  emailVerified: boolean;
+  status?: "online" | "offline";
+  createdAt: string;
+  lastSeen: string;
+}
+
+export interface InternetConversation {
+  id: string;
+  participants: string[];
+  participantDetails?: {
+    [uid: string]: {
+      displayName: string;
+      phoneNumber: string;
+      email: string;
+    };
+  };
+  lastMessage?: string;
+  lastMessageAt?: number;
+  lastMessageSenderId?: string;
+  unreadCounts?: { [uid: string]: number };
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface InternetMessage {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  receiverId: string;
+  text: string;
+  timestamp: number;
+  status: "sent" | "delivered" | "read";
+}
+
+export type DeviceType = "phone" | "laptop" | "desktop" | "tablet" | "unknown";
+
+export interface DeviceInfo {
+  deviceId: string;
+  deviceName: string;
+  deviceType: DeviceType;
+  os: string;
+  browser: string;
+  userAgent: string;
+}
+
+export interface ConnectedPeer {
+  deviceId: string;
+  deviceName: string;
+  deviceType: DeviceType;
+  os?: string;
+  connectionCode?: string;
+  status: PeerConnectionStatus;
+  dataChannelStatus: "connecting" | "open" | "closing" | "closed";
+  connectedAt?: number;
+  lastSeen: number;
+  latencyMs?: number;
+  isInitiator: boolean;
+  unreadCount: number;
+  lastMessage?: ChatMessage;
+  iceCandidateType?: "host" | "srflx" | "relay" | "unknown"; // local LAN (host), STUN (srflx), or TURN (relay)
+}
+
+export interface IncomingConnectionRequest {
+  id: string;
+  fromDeviceId: string;
+  fromDeviceName: string;
+  timestamp: number;
+  data?: any;
+}
+
+export interface FileTransferItem {
+  id: string;
+  name: string;
+  size: number;
+  mimeType: string;
+  totalChunks: number;
+  progress: number; // 0 - 100
+  status: "transferring" | "completed" | "error" | "cancelled";
+  url?: string;
+  speed?: string;
+  error?: string;
+  isMine?: boolean;
+  textContent?: string;
+}
+
+export interface VoiceMessageItem {
+  id: string;
+  url: string;
+  duration: number; // in seconds
+  mimeType: string;
+  size: number;
+  waveformData?: number[];
+}
+
+export interface ChatMessage {
+  id: string;
+  fromDeviceId: string;
+  toDeviceId: string;
+  text: string;
+  timestamp: number;
+  status: "sending" | "sent" | "delivered" | "read" | "failed";
+  isMine: boolean;
+  type?: "text" | "file" | "voice";
+  file?: FileTransferItem;
+  voice?: VoiceMessageItem;
+}
+
+export type CallStatus =
+  | "idle"
+  | "outgoing_calling"
+  | "incoming_ringing"
+  | "connected"
+  | "ended";
+
+export interface ActiveCallState {
+  callId: string;
+  peerId: string;
+  peerName: string;
+  peerDeviceType?: DeviceType;
+  status: CallStatus;
+  isCaller: boolean;
+  startTime?: number;
+  duration: number; // in seconds
+  isMuted: boolean;
+  isSpeakerOn?: boolean;
+  isRemoteMuted?: boolean;
+}
+
+export interface PushSubscriptionPayload {
+  endpoint: string;
+  keys: {
+    p256dh: string;
+    auth: string;
+  };
+}
+
+export interface PushNotificationConfig {
+  supported: boolean;
+  permission: NotificationPermission;
+  isSubscribed: boolean;
+}
+
+export type DataPacketType =
+  | "text"
+  | "delivery_ack"
+  | "read_ack"
+  | "typing"
+  | "ping"
+  | "pong"
+  | "file_start"
+  | "file_chunk"
+  | "file_complete"
+  | "file_ack"
+  | "file_cancel"
+  | "voice_message"
+  | "call_request"
+  | "call_accept"
+  | "call_reject"
+  | "call_end"
+  | "call_mute_toggle"
+  | "call_ice_candidate"
+  | "disconnect_notify";
+
+export interface DataPacket {
+  id: string;
+  type: DataPacketType;
+  timestamp: number;
+  senderId: string;
+  senderName: string;
+  payload: any;
+}
+
+export interface IceServerConfig {
+  urls: string | string[];
+  username?: string;
+  credential?: string;
+}
+
+export interface SignalMessage {
+  id: string;
+  fromDeviceId: string;
+  fromDeviceName: string;
+  toDeviceId: string;
+  type:
+    | "connect_request"
+    | "connect_response"
+    | "offer"
+    | "answer"
+    | "ice-candidate"
+    | "disconnect";
+  data: any;
+  timestamp: number;
+}
+

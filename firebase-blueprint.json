@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile for Internet communication mode",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique user ID matching auth.uid" },
+        "phoneNumber": { "type": "string", "description": "Searchable phone number" },
+        "email": { "type": "string", "description": "Email address" },
+        "displayName": { "type": "string", "description": "Display name" },
+        "emailVerified": { "type": "boolean", "description": "Whether user email is verified" },
+        "status": { "type": "string", "description": "Presence status" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" },
+        "lastSeen": { "type": "string", "description": "Last seen timestamp" }
+      },
+      "required": ["uid", "phoneNumber", "email", "displayName"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Direct conversation between users in Internet mode",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique conversation ID" },
+        "participants": { "type": "array", "description": "Array of participant UIDs" },
+        "lastMessage": { "type": "string", "description": "Snippet of last message" },
+        "lastMessageAt": { "type": "number", "description": "Timestamp of last message" },
+        "lastMessageSenderId": { "type": "string", "description": "Sender UID of last message" },
+        "createdAt": { "type": "number", "description": "Creation timestamp" },
+        "updatedAt": { "type": "number", "description": "Update timestamp" }
+      },
+      "required": ["id", "participants", "createdAt", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Chat message within a conversation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique message ID" },
+        "conversationId": { "type": "string", "description": "Parent conversation ID" },
+        "senderId": { "type": "string", "description": "UID of sender" },
+        "receiverId": { "type": "string", "description": "UID of recipient" },
+        "text": { "type": "string", "description": "Message text content" },
+        "timestamp": { "type": "number", "description": "Timestamp in milliseconds" },
+        "status": { "type": "string", "description": "Delivery status: sent, delivered, or read" }
+      },
+      "required": ["id", "conversationId", "senderId", "receiverId", "text", "timestamp", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles indexed by UID. Registered users can find contacts and update their own profile."
+    },
+    "/conversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Conversations accessible only by participants."
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages inside a conversation, accessible and writable only by conversation participants."
+    }
+  }
+}

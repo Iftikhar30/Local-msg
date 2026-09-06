@@ -1,0 +1,6 @@
+{
+  "name": "LocalLink",
+  "description": "Dual-mode private communication app featuring direct local WebRTC P2P (zero-login) alongside an internet mode powered by Firebase with email verification, contacts directory, and encrypted messaging.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
